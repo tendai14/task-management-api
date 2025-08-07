@@ -1,4 +1,4 @@
-package com.smoothstack.task_management_api.services;
+package com.smoothstack.task_management_api.services.impl;
 
 import com.smoothstack.task_management_api.models.entities.User;
 import com.smoothstack.task_management_api.repositories.UserRepository;

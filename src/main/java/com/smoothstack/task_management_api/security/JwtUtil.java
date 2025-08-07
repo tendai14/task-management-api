@@ -1,9 +1,12 @@
 package com.smoothstack.task_management_api.security;
 
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,30 +16,54 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET = "M6aN3T9G4z8X7L9jQv2yUu1eK9kVv8rKm4xA9mEwP2zBxC8mFwVgHs9Mz1YxUu3Lt7FgQv7YqNtPrQ2SxTzQhYg==";
+    @Value("${jwt.secret}")
+    private String secret;
 
+    private SecretKey key;
 
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    @PostConstruct
+    public void init() {
+        key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private SecretKey getKey() {
+        return key;
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+        try {
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token)
-                .getBody().getExpiration().before(new Date());
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .before(new Date());
     }
 }

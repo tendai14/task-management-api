@@ -1,6 +1,6 @@
 package com.smoothstack.task_management_api.security;
 
-import com.smoothstack.task_management_api.services.UserDetailsServiceImpl;
+import com.smoothstack.task_management_api.services.impl.UserDetailsServiceImpl;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

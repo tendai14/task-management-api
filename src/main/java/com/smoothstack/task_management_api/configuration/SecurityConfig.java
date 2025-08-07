@@ -1,7 +1,6 @@
 package com.smoothstack.task_management_api.configuration;
 
 import com.smoothstack.task_management_api.security.JwtFilter;
-import com.smoothstack.task_management_api.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

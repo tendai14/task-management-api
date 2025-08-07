@@ -2,11 +2,14 @@ package com.smoothstack.task_management_api.models.entities;
 
 
 import com.smoothstack.task_management_api.enums.Role;
+import com.smoothstack.task_management_api.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -25,4 +28,9 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private LocalDateTime createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
