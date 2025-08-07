@@ -18,8 +18,8 @@ public class TaskManagerController {
 
     @GetMapping
     public List<Task> getTasks(@RequestParam(required = false) TaskStatus status,
-                               @RequestParam(required = false) Long assigneeId) {
-        return taskService.getAllTasks(status, assigneeId);
+                               @RequestParam(required = false) Long assignee) {
+        return taskService.getAllTasks(status, assignee);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.smoothstack.task_management_api.models.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smoothstack.task_management_api.enums.Role;
 import com.smoothstack.task_management_api.enums.TaskStatus;
 import jakarta.persistence.*;
