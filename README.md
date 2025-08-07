@@ -9,6 +9,8 @@
 # To run the project
 Commands - 1. mvn clean install
            2. mvn spring-boot:run
+# To run test cases
+mvn run
 
 # Application access
 I have added swagger docs for easy api access here : http://localhost:8080/swagger-ui/index.html#/
